@@ -1,6 +1,7 @@
 # mortgage.py
 #
 # Exercise 1.10 - my second version
+# Exercise 1.11 - my third version fix the program to correct for the overpayment that occurs in the last month.
 
 principal = 500000.0
 rate_yearly = 0.05
@@ -16,17 +17,25 @@ month_count = 0
 # payment for the rest of months
 while principal > 0:
     month_count += 1
-    principal = principal * (1 + rate_yearly / 12) - payment_monthly
+
     total_paid += payment_monthly
+    principal = principal * (1 + rate_yearly / 12) - payment_monthly
 
     if (
         month_count >= extra_payment_start_month
         and month_count <= extra_payment_end_month
     ):
-        principal = principal - extra_payment
         total_paid += extra_payment
+        principal = principal - extra_payment
 
     print(month_count, round(total_paid, 2), round(principal, 2))
+
+    # if the last year principal < payment_monthly
+    if principal * (1 + rate_yearly / 12) < payment_monthly:
+        month_count += 1
+        total_paid += principal * (1 + rate_yearly / 12)
+        principal = 0
+        print(month_count, round(total_paid, 2), round(principal, 2))
 
 
 print("total_paid", total_paid, "month_count:", month_count)
