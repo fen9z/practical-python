@@ -1,21 +1,22 @@
 # pcost.py
 #
-# Exercise 1.27, 1.30, 1.31(error handle)
+# Exercise 1.32(csv moudle)
+import csv
 
 
 def portFolio_cost(filename):
     f = open(filename, "rt")
-    headers = next(f).split(",")
+    rows = csv.reader(f)
+    headers = next(rows)
     cost = 0
 
-    for line in f:
-        fields = line.split(",")
+    for row in rows:
         try:
-            shares = int(fields[1])
-            price = float(fields[2])
+            shares = int(row[1])
+            price = float(row[2])
             cost += shares * price
         except ValueError:
-            print("Couldn't parse", line)
+            print("Couldn't parse", row)
 
     return cost
 

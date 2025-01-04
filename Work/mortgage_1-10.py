@@ -28,14 +28,17 @@ while principal > 0:
         total_paid += extra_payment
         principal = principal - extra_payment
 
-    print(month_count, round(total_paid, 2), round(principal, 2))
+    # print(month_count, round(total_paid, 2), round(principal, 2))
+    print(f"{month_count:>4d}, {round(total_paid, 2):>10f}, {round(principal, 2):>10f}")
 
     # if the last year principal < payment_monthly
     if principal * (1 + rate_yearly / 12) < payment_monthly:
         month_count += 1
         total_paid += principal * (1 + rate_yearly / 12)
         principal = 0
-        print(month_count, round(total_paid, 2), round(principal, 2))
+        print(
+            f"{month_count:>4d}, {round(total_paid, 2):>10f}, {round(principal, 2):>10f}"
+        )
 
 
 print("total_paid", total_paid, "month_count:", month_count)
