@@ -1,6 +1,7 @@
 # pcost.py
 #
-# Exercise 1.33(csv moudle)
+# Exercise 1.33: Reading from the command line
+
 import csv, sys
 
 

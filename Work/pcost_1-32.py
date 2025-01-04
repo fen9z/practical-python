@@ -1,6 +1,6 @@
 # pcost.py
 #
-# Exercise 1.32(csv moudle)
+# Exercise 1.32: Using a library function(csv)
 import csv
 
 
