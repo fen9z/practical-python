@@ -1,6 +1,6 @@
 # report.py
 #
-# Exercise 2.4 a list of Dictionaries
+# Exercise 2.5 a list of Dictionaries
 import csv, sys
 
 
@@ -14,12 +14,12 @@ def read_portfolio(filename):
 
         for row in rows:
             try:
-                holding = {
+                stock = {
                     "name": row[0],
                     "shares": int(row[1]),
                     "price": float(row[2]),
                 }
-                portfolio.append(holding)
+                portfolio.append(stock)
             except ValueError:
                 print("Couldn't parse", row)
 
