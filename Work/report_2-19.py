@@ -1,6 +1,6 @@
 # report.py
 #
-# Exercise 2.9: Dictionaries as a container
+# Exercise 2.19: List comprehensions
 
 import csv, sys
 
@@ -58,26 +58,6 @@ def make_report(portfolio, prices):
     return reports
 
 
-portfolio = read_portfolio("Data/portfolio.csv")
-portfoliodate = read_portfolio("Data/portfoliodate.csv")
-prices = read_prices("Data/prices.csv")
-
-# Calculate the total cost of the portfolio
-total_cost = 0.0
-for s in portfolio:
-    total_cost += s["shares"] * s["price"]
-
-print("Total cost", total_cost)
-
-# Compute the current value of the portfolio
-total_value = 0.0
-for s in portfolio:
-    total_value += s["shares"] * prices[s["name"]]
-
-print("Current value", total_value)
-print("Gain", total_value - total_cost)
-
-
 def print_report(report):
     headers = ("Name", "Shares", "Price", "Change")
     print("%10s %10s %10s %10s" % headers)
@@ -86,14 +66,27 @@ def print_report(report):
         print(f"{name:>10s} {shares:>10d} {price:>10.2f} {change:>10.2f}")
 
 
-print("\nportfolio.csv report\n")
-report1 = make_report(portfolio, prices)
+def portfolio_report(portfolio_file, prices_file):
+    portfolio = read_portfolio(portfolio_file)
+    prices = read_prices(prices_file)
 
-# Output the report1
-print_report(report1)
+    # Calculate the total cost of the portfolio
+    total_cost = 0.0
+    for s in portfolio:
+        total_cost += s["shares"] * s["price"]
 
-print("\nportfoliodate.csv report\n")
-report2 = make_report(portfoliodate, prices)
+    print("Total cost", total_cost)
 
-# Output the report2
-print_report(report2)
+    # Compute the current value of the portfolio
+    total_value = 0.0
+    for s in portfolio:
+        total_value += s["shares"] * prices[s["name"]]
+
+    print("Current value", total_value)
+    print("Gain", total_value - total_cost)
+
+    report = make_report(portfolio, prices)
+    print_report(report)
+
+
+portfolio_report("Data/portfolio.csv", "Data/prices.csv")
