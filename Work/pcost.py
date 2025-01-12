@@ -1,24 +1,30 @@
 # pcost.py
 #
-# Exercise 1.27, 1.30, 1.31(error handle)
+# Exercise 1.33: Reading from the command line
 
 
-def portFolio_cost(filename):
-    f = open(filename, "rt")
-    headers = next(f).split(",")
-    cost = 0
-
-    for line in f:
-        fields = line.split(",")
-        try:
-            shares = int(fields[1])
-            price = float(fields[2])
-            cost += shares * price
-        except ValueError:
-            print("Couldn't parse", line)
-
-    return cost
+import report
 
 
-cost = portFolio_cost("Data/portfolio.csv")
-print(f"Total cost", round(cost, 2))
+def portfolio_cost(filename):
+    """Computes the total cost (shares*price) of a portfolio file"""
+    portfolio = report.read_portfolio(filename)
+
+    return sum([s["shares"] * s["price"] for s in portfolio])
+
+
+def main(argv):
+    # deal with pass the name of file in as an argument to a script
+    # currently, this file si a script file, it can be recive arguments
+    if len(argv) == 2:
+        filename = argv[1]
+    else:
+        filename = "Data/portfolio.csv"
+    cost = portfolio_cost(filename)
+    print(f"Total cost", round(cost, 2))
+
+
+if __name__ == "__main__":
+    import sys
+
+    main(sys.argv)
