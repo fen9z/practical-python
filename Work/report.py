@@ -3,20 +3,25 @@
 # Exercise 2.19: List comprehensions
 
 import fileparse
+import stock
 
 
 def read_portfolio(filename):
     """opens a given portfolio file and reads it into a list of Dictionaries."""
-    portfolio = fileparse.parse_csv(
-        filename, select=["name", "shares", "price"], types=[str, int, float]
-    )
+    with open(filename) as lines:
+        portdicts = fileparse.parse_csv(
+            lines, select=["name", "shares", "price"], types=[str, int, float]
+        )
+
+    portfolio = [stock.Stock(d["name"], d["shares"], d["price"]) for d in portdicts]
 
     return portfolio
 
 
 def read_prices(filename):
     """reads a set of prices such as this into a dictionary where the keys of the dictionary are the stock names and the values in the dictionary are the stock prices."""
-    return dict(fileparse.parse_csv(filename, types=[str, float], has_headers=False))
+    with open(filename) as lines:
+        return dict(fileparse.parse_csv(lines, types=[str, float], has_headers=False))
 
 
 def make_report(portfolio, prices):
@@ -24,10 +29,10 @@ def make_report(portfolio, prices):
 
     for stock in portfolio:
         item = (
-            stock["name"],
-            stock["shares"],
-            prices[stock["name"]],
-            prices[stock["name"]] - stock["price"],
+            stock.name,
+            stock.shares,
+            prices[stock.name],
+            prices[stock.name] - stock.price,
         )
         reports.append(item)
 
@@ -49,14 +54,14 @@ def portfolio_report(portfolio_file, prices_file):
     # Calculate the total cost of the portfolio
     total_cost = 0.0
     for s in portfolio:
-        total_cost += s["shares"] * s["price"]
+        total_cost += s.shares * s.price
 
     print("Total cost", total_cost)
 
     # Compute the current value of the portfolio
     total_value = 0.0
     for s in portfolio:
-        total_value += s["shares"] * prices[s["name"]]
+        total_value += s.shares * prices[s.name]
 
     print("Current value", total_value)
     print("Gain", total_value - total_cost)
