@@ -1,9 +1,10 @@
 # report.py
 #
-# Exercise 2.19: List comprehensions
+# Exercise 4-4: List comprehensions
 
 import fileparse
-import stock
+from stock import Stock
+import tableformat
 
 
 def read_portfolio(filename):
@@ -13,7 +14,7 @@ def read_portfolio(filename):
             lines, select=["name", "shares", "price"], types=[str, int, float]
         )
 
-    portfolio = [stock.Stock(d["name"], d["shares"], d["price"]) for d in portdicts]
+    portfolio = [Stock(d["name"], d["shares"], d["price"]) for d in portdicts]
 
     return portfolio
 
@@ -39,15 +40,17 @@ def make_report(portfolio, prices):
     return reports
 
 
-def print_report(report):
-    headers = ("Name", "Shares", "Price", "Change")
-    print("%10s %10s %10s %10s" % headers)
-    print(("-" * 10 + " ") * len(headers))
-    for name, shares, price, change in report:
-        print(f"{name:>10s} {shares:>10d} {price:>10.2f} {change:>10.2f}")
+def print_report(reportdata, formatter):
+    '''
+    Print a nicely formatted table from a list of(name, shares, price, change) tuples.
+    '''
+    formatter.headings(["Name", "Shares", "Price", "Change"])
+    for name, shares, price, change in reportdata:
+        rowdata = [name, str(shares), f'{price:0.2f}', f'{change:0.2f}']
+        formatter.row(rowdata)
 
 
-def portfolio_report(portfolio_file, prices_file):
+def portfolio_report(portfolio_file, prices_file, fmt='txt'):
     portfolio = read_portfolio(portfolio_file)
     prices = read_prices(prices_file)
 
@@ -67,7 +70,9 @@ def portfolio_report(portfolio_file, prices_file):
     print("Gain", total_value - total_cost)
 
     report = make_report(portfolio, prices)
-    print_report(report)
+    #print it out
+    formatter = tableformat.create_formatter(fmt)
+    print_report(report, formatter)
 
 
 def main(args):
